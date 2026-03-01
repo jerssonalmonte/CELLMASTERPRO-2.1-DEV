@@ -1,0 +1,1 @@
+ALTER TABLE public.inventory_items ADD COLUMN min_price numeric NOT NULL DEFAULT 0;

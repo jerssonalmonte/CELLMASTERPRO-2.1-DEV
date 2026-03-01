@@ -1,0 +1,1 @@
+INSERT INTO public.tenants (name, slug) VALUES ('CellMaster Zona Colonial', 'cellmaster-zona-colonial');

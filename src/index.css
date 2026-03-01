@@ -1,0 +1,330 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 222 22% 8%;
+    --foreground: 210 20% 95%;
+
+    --card: 222 20% 11%;
+    --card-foreground: 210 20% 95%;
+
+    --popover: 222 22% 12%;
+    --popover-foreground: 210 20% 95%;
+
+    --primary: 212 100% 56%;
+    --primary-foreground: 0 0% 100%;
+    --primary-glow: 212 100% 64%;
+
+    --secondary: 222 18% 16%;
+    --secondary-foreground: 210 20% 95%;
+
+    --muted: 222 18% 14%;
+    --muted-foreground: 215 15% 55%;
+
+    --accent: 210 70% 45%;
+    --accent-foreground: 210 100% 95%;
+
+    --destructive: 0 72% 55%;
+    --destructive-foreground: 0 0% 100%;
+
+    --success: 152 60% 48%;
+    --success-foreground: 0 0% 100%;
+
+    --warning: 38 95% 55%;
+    --warning-foreground: 0 0% 10%;
+
+    --border: 222 15% 18%;
+    --input: 222 15% 20%;
+    --ring: 212 100% 56%;
+
+    --radius: 0.75rem;
+
+    --status-waiting: 38 95% 55%;
+    --status-waiting-bg: 38 95% 55% / 0.15;
+    --status-process: 212 100% 56%;
+    --status-process-bg: 212 100% 56% / 0.15;
+    --status-testing: 210 70% 55%;
+    --status-testing-bg: 210 70% 55% / 0.15;
+    --status-ready: 152 60% 48%;
+    --status-ready-bg: 152 60% 48% / 0.15;
+    --status-received: 215 30% 60%;
+    --status-received-bg: 215 30% 60% / 0.15;
+    --status-done: 215 10% 45%;
+    --status-done-bg: 215 10% 45% / 0.15;
+    --status-ok: 152 60% 48%;
+    --status-ok-bg: 152 60% 48% / 0.15;
+    --status-late: 0 72% 55%;
+    --status-late-bg: 0 72% 55% / 0.15;
+
+    --sidebar-background: 222 25% 6%;
+    --sidebar-foreground: 215 15% 65%;
+    --sidebar-primary: 212 100% 56%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 222 18% 12%;
+    --sidebar-accent-foreground: 210 20% 95%;
+    --sidebar-border: 222 15% 14%;
+    --sidebar-ring: 212 100% 56%;
+
+    --shadow-sm: 0 1px 3px 0 hsl(0 0% 0% / 0.3);
+    --shadow-md: 0 4px 16px -2px hsl(0 0% 0% / 0.4);
+    --shadow-lg: 0 8px 30px -4px hsl(0 0% 0% / 0.5);
+    --shadow-glow: 0 0 24px -4px hsl(212 100% 56% / 0.3);
+    --shadow-accent-glow: 0 0 20px -4px hsl(210 70% 45% / 0.2);
+  }
+
+  .light {
+    --background: 0 0% 98%;
+    --foreground: 222 20% 12%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222 20% 12%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 20% 12%;
+
+    --primary: 212 100% 48%;
+    --primary-foreground: 0 0% 100%;
+    --primary-glow: 212 100% 56%;
+
+    --secondary: 215 20% 93%;
+    --secondary-foreground: 222 20% 20%;
+
+    --muted: 215 15% 94%;
+    --muted-foreground: 215 15% 45%;
+
+    --accent: 210 65% 48%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 72% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    --success: 152 55% 42%;
+    --success-foreground: 0 0% 100%;
+
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 10%;
+
+    --border: 215 20% 88%;
+    --input: 215 20% 90%;
+    --ring: 212 100% 48%;
+
+    --status-waiting: 38 92% 50%;
+    --status-waiting-bg: 38 92% 50% / 0.12;
+    --status-process: 212 100% 48%;
+    --status-process-bg: 212 100% 48% / 0.12;
+    --status-testing: 210 65% 50%;
+    --status-testing-bg: 210 65% 50% / 0.12;
+    --status-ready: 152 55% 42%;
+    --status-ready-bg: 152 55% 42% / 0.12;
+    --status-received: 215 25% 55%;
+    --status-received-bg: 215 25% 55% / 0.12;
+    --status-done: 215 10% 50%;
+    --status-done-bg: 215 10% 50% / 0.12;
+    --status-ok: 152 55% 42%;
+    --status-ok-bg: 152 55% 42% / 0.12;
+    --status-late: 0 72% 50%;
+    --status-late-bg: 0 72% 50% / 0.12;
+
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 215 15% 45%;
+    --sidebar-primary: 212 100% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 215 20% 95%;
+    --sidebar-accent-foreground: 222 20% 12%;
+    --sidebar-border: 215 20% 90%;
+    --sidebar-ring: 212 100% 48%;
+
+    --shadow-sm: 0 1px 3px 0 hsl(0 0% 0% / 0.08);
+    --shadow-md: 0 4px 16px -2px hsl(0 0% 0% / 0.1);
+    --shadow-lg: 0 8px 30px -4px hsl(0 0% 0% / 0.12);
+    --shadow-glow: 0 0 24px -4px hsl(212 100% 48% / 0.15);
+    --shadow-accent-glow: 0 0 20px -4px hsl(210 65% 48% / 0.1);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: 'Inter', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Better scrollbar styling */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--muted-foreground) / 0.3);
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--muted-foreground) / 0.5);
+  }
+}
+
+@layer components {
+  .kpi-card {
+    @apply rounded-xl border bg-card p-5 shadow-sm transition-all duration-300 hover:shadow-md hover:border-primary/20 hover:-translate-y-0.5;
+  }
+
+  .status-badge {
+    @apply inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-medium;
+  }
+
+  .kanban-col {
+    @apply flex w-[270px] min-w-[270px] shrink-0 flex-col gap-2;
+  }
+
+  .repair-card {
+    @apply rounded-xl border bg-card p-3 transition-all duration-200 hover:border-primary/40 hover:shadow-lg hover:-translate-y-0.5 cursor-pointer text-sm leading-normal;
+  }
+
+  .section-header {
+    @apply flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between;
+  }
+
+  .page-title {
+    @apply text-xl sm:text-2xl font-bold tracking-tight;
+  }
+
+  .table-row-hover {
+    @apply transition-colors hover:bg-muted/50;
+  }
+
+  .page-container {
+    @apply p-4 md:p-6 space-y-5;
+  }
+
+  /* Glass card effect */
+  .glass-card {
+    @apply rounded-xl border bg-card/80 backdrop-blur-sm shadow-sm;
+  }
+
+  /* Admin panel cards */
+  .admin-card {
+    @apply rounded-xl border border-white/[0.06] shadow-sm transition-all duration-200;
+    background: hsl(220 20% 9%);
+  }
+  .admin-card:hover {
+    border-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 20px -4px rgba(0, 0, 0, 0.4);
+  }
+
+  /* Gradient text utility */
+  .gradient-text {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent;
+  }
+
+  /* Responsive table wrapper */
+  .table-wrapper {
+    @apply rounded-xl border overflow-hidden;
+  }
+
+  .table-wrapper .table-header-row {
+    @apply bg-muted/40;
+  }
+
+  /* Form groups */
+  .form-grid {
+    @apply grid gap-3 grid-cols-1 sm:grid-cols-2;
+  }
+
+  .form-grid-3 {
+    @apply grid gap-3 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3;
+  }
+
+  /* Empty state */
+  .empty-state {
+    @apply flex flex-col items-center justify-center py-16 text-muted-foreground;
+  }
+
+  .empty-state-icon {
+    @apply h-12 w-12 text-muted-foreground/20 mb-3;
+  }
+
+  /* Mobile action bar */
+  .mobile-action-bar {
+    @apply fixed bottom-0 left-0 right-0 z-50 border-t bg-background/95 backdrop-blur-sm p-3 sm:hidden;
+  }
+
+  /* Animated gradient border */
+  .gradient-border {
+    @apply relative;
+  }
+  .gradient-border::before {
+    content: '';
+    @apply absolute -inset-px rounded-xl bg-gradient-to-r from-primary/50 via-accent/50 to-primary/50 -z-10 opacity-0 transition-opacity duration-300;
+  }
+  .gradient-border:hover::before {
+    @apply opacity-100;
+  }
+}
+
+/* Print styles */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .print-receipt,
+  .print-receipt * {
+    visibility: visible;
+  }
+  .print-receipt {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 80mm;
+  }
+}
+
+/* Animation utilities */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(-10px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 8px hsl(212 100% 56% / 0.2); }
+  50% { box-shadow: 0 0 20px hsl(212 100% 56% / 0.4); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.35s ease-out;
+}
+
+.animate-slide-in {
+  animation: slideIn 0.25s ease-out;
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, transparent, hsl(212 100% 56% / 0.05), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 3s ease-in-out infinite;
+}
