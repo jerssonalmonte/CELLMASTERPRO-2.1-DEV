@@ -264,249 +264,249 @@ export function BatchInventoryDialog({ open, onOpenChange, tenantId }: Props) {
 
   return (
     <>
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-[95vw] max-w-6xl h-[90vh] flex flex-col p-0 gap-0">
-        <DialogHeader className="px-6 pt-5 pb-3 border-b shrink-0">
-          <DialogTitle className="flex items-center gap-2 text-lg">
-            <Plus className="h-5 w-5 text-primary" />
-            Agregar Inventario por Lote
-          </DialogTitle>
-          <p className="text-xs text-muted-foreground mt-1">
-            Ingresa múltiples artículos del mismo tipo. Presiona <kbd className="px-1 py-0.5 rounded bg-muted text-[10px] font-mono">Enter</kbd> o <kbd className="px-1 py-0.5 rounded bg-muted text-[10px] font-mono">Tab</kbd> en la última fila para agregar otra.
-          </p>
-        </DialogHeader>
+      <Dialog open={open} onOpenChange={onOpenChange}>
+        <DialogContent className="w-[95vw] max-w-6xl h-[90vh] flex flex-col p-0 gap-0">
+          <DialogHeader className="px-6 pt-5 pb-3 border-b shrink-0">
+            <DialogTitle className="flex items-center gap-2 text-lg">
+              <Plus className="h-5 w-5 text-primary" />
+              Agregar Inventario por Lote
+            </DialogTitle>
+            <p className="text-xs text-muted-foreground mt-1">
+              Ingresa múltiples artículos del mismo tipo. Presiona <kbd className="px-1 py-0.5 rounded bg-muted text-[10px] font-mono">Enter</kbd> o <kbd className="px-1 py-0.5 rounded bg-muted text-[10px] font-mono">Tab</kbd> en la última fila para agregar otra.
+            </p>
+          </DialogHeader>
 
-        {/* Scrollable body */}
-        <div className="flex-1 overflow-y-auto px-6 py-4 space-y-5">
-          {/* Category selector */}
-          <div className="flex gap-2 flex-wrap">
-            <Button variant={isDevice ? 'default' : 'outline'} size="sm" onClick={() => { setCategory('celular'); setBrand(''); setModel(''); }}>
-              <Smartphone className="h-3.5 w-3.5 mr-1" /> Equipos
-            </Button>
-            <Button variant={isAcc ? 'default' : 'outline'} size="sm" onClick={() => { setCategory('accesorio'); setBrand(''); setModel(''); }}>
-              <Headphones className="h-3.5 w-3.5 mr-1" /> Productos
-            </Button>
-            <Button variant={isSpare ? 'default' : 'outline'} size="sm" onClick={() => { setCategory('repuesto'); setBrand(''); setModel(''); }}>
-              <Wrench className="h-3.5 w-3.5 mr-1" /> Repuestos
-            </Button>
-          </div>
-
-          {/* Common fields */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-3">
-            {isSpare && (
-              <div>
-                <Label className="text-xs font-medium mb-1 block">Categoría *</Label>
-                <Select value={spareCategory} onValueChange={setSpareCategory}>
-                  <SelectTrigger className="h-9"><SelectValue placeholder="Seleccionar" /></SelectTrigger>
-                  <SelectContent>
-                    {allSpareCategories.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
-                  </SelectContent>
-                </Select>
-              </div>
-            )}
-            <div>
-              <Label className="text-xs font-medium mb-1 block">Marca *</Label>
-              {isDevice ? (
-                <BrandSelect value={brand} onChange={(v) => { setBrand(v); setModel(''); }} />
-              ) : (
-                <Input value={brand} onChange={(e) => setBrand(e.target.value)} placeholder="Ej: Samsung, OEM..." className="h-9" />
-              )}
-            </div>
-            <div>
-              <Label className="text-xs font-medium mb-1 block">{isSpare ? 'Nombre *' : isAcc ? 'Tipo *' : 'Modelo *'}</Label>
-              {isDevice ? (
-                <ModelSelect brand={brand} value={model} onChange={setModel} />
-              ) : isAcc ? (
-                <Select value={ACCESSORY_CATEGORIES.includes(model) ? model : ''} onValueChange={setModel}>
-                  <SelectTrigger className="h-9"><SelectValue placeholder="Tipo" /></SelectTrigger>
-                  <SelectContent>
-                    {ACCESSORY_CATEGORIES.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
-                  </SelectContent>
-                </Select>
-              ) : (
-                <Input value={model} onChange={(e) => setModel(e.target.value)} placeholder="Ej: Pantalla iPhone 13" className="h-9" />
-              )}
-            </div>
-            {/* Capacity moved to per-line in the batch table */}
-            {isDevice && (
-              <div>
-                <Label className="text-xs font-medium mb-1 block">Condición</Label>
-                <Select value={condition} onValueChange={setCondition}>
-                  <SelectTrigger className="h-9"><SelectValue /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="excelente">Excelente</SelectItem>
-                    <SelectItem value="bueno">Bueno</SelectItem>
-                    <SelectItem value="usado">Usado</SelectItem>
-                    <SelectItem value="regular">Regular</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            )}
-            <div className="flex items-end pb-1">
-              <div className="flex items-center gap-2">
-                <Switch checked={isNew} onCheckedChange={setIsNew} />
-                <Label className="text-xs">Nuevos</Label>
-              </div>
-            </div>
-          </div>
-
-          <Separator />
-
-          {/* Batch rows */}
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <h3 className="text-sm font-semibold">Artículos ({batchItems.length})</h3>
-              <Button size="sm" variant="outline" onClick={() => addBatchRow()}>
-                <Plus className="mr-1 h-3.5 w-3.5" /> Agregar fila
+          {/* Scrollable body */}
+          <div className="flex-1 overflow-y-auto px-6 py-4 space-y-5">
+            {/* Category selector */}
+            <div className="flex gap-2 flex-wrap">
+              <Button variant={isDevice ? 'default' : 'outline'} size="sm" onClick={() => { setCategory('celular'); setBrand(''); setModel(''); }}>
+                <Smartphone className="h-3.5 w-3.5 mr-1" /> Equipos
+              </Button>
+              <Button variant={isAcc ? 'default' : 'outline'} size="sm" onClick={() => { setCategory('accesorio'); setBrand(''); setModel(''); }}>
+                <Headphones className="h-3.5 w-3.5 mr-1" /> Productos
+              </Button>
+              <Button variant={isSpare ? 'default' : 'outline'} size="sm" onClick={() => { setCategory('repuesto'); setBrand(''); setModel(''); }}>
+                <Wrench className="h-3.5 w-3.5 mr-1" /> Repuestos
               </Button>
             </div>
 
-            <div className="rounded-lg border">
-              <Table>
-                <TableHeader>
-                  <TableRow className="bg-muted/50">
-                    <TableHead className="text-xs w-10 text-center">#</TableHead>
-                    {isDevice && <TableHead className="text-xs">IMEI</TableHead>}
-                    <TableHead className="text-xs">Color</TableHead>
-                    {isDevice && <TableHead className="text-xs">Capacidad</TableHead>}
-                    {isDevice && <TableHead className="text-xs w-[70px]">Grado</TableHead>}
-                    {isDevice && <TableHead className="text-xs w-[70px]">Bat %</TableHead>}
-                    {!isDevice && <TableHead className="text-xs w-[70px]">Cant.</TableHead>}
-                    <TableHead className="text-xs">Compra</TableHead>
-                    <TableHead className="text-xs">Venta</TableHead>
-                    <TableHead className="text-xs">Ganancia</TableHead>
-                    <TableHead className="text-xs">Nota</TableHead>
-                    <TableHead className="w-10" />
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {batchItems.map((row, i) => {
-                    const profit = (parseFloat(row.salePrice) || 0) - (parseFloat(row.purchaseCost) || 0);
-                    return (
-                      <TableRow key={row.id}>
-                        <TableCell className="text-xs text-center font-medium text-muted-foreground">{i + 1}</TableCell>
-                        {isDevice && (
-                          <TableCell>
-                            <div className="flex gap-1">
-                              <Input
-                                ref={(el) => { imeiRefs.current[row.id] = el; }}
-                                value={row.imei}
-                                onChange={(e) => updateBatchRow(row.id, 'imei', e.target.value)}
-                                placeholder="IMEI"
-                                className="h-8 text-xs"
-                              />
-                              <Button type="button" variant="ghost" size="icon" className="h-8 w-8 shrink-0" onClick={() => { setScanRowId(row.id); setShowImeiScanner(true); }}>
-                                <Camera className="h-3.5 w-3.5" />
-                              </Button>
-                            </div>
-                          </TableCell>
-                        )}
-                        <TableCell>
-                          {isDevice && catalogDevice?.colors ? (
-                            <Select value={row.color} onValueChange={(v) => updateBatchRow(row.id, 'color', v)}>
-                              <SelectTrigger className="h-8 text-xs"><SelectValue placeholder="—" /></SelectTrigger>
-                              <SelectContent>{catalogDevice.colors.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}</SelectContent>
-                            </Select>
-                          ) : (
-                            <Input value={row.color} onChange={(e) => updateBatchRow(row.id, 'color', e.target.value)} placeholder="Color" className="h-8 text-xs" />
+            {/* Common fields */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-3">
+              {isSpare && (
+                <div>
+                  <Label className="text-xs font-medium mb-1 block">Categoría *</Label>
+                  <Select value={spareCategory} onValueChange={setSpareCategory}>
+                    <SelectTrigger className="h-9"><SelectValue placeholder="Seleccionar" /></SelectTrigger>
+                    <SelectContent>
+                      {allSpareCategories.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
+              <div>
+                <Label className="text-xs font-medium mb-1 block">Marca *</Label>
+                {isDevice ? (
+                  <BrandSelect value={brand} onChange={(v) => { setBrand(v); setModel(''); }} />
+                ) : (
+                  <Input value={brand} onChange={(e) => setBrand(e.target.value)} placeholder="Ej: Samsung, OEM..." className="h-9" />
+                )}
+              </div>
+              <div>
+                <Label className="text-xs font-medium mb-1 block">{isSpare ? 'Nombre *' : isAcc ? 'Tipo *' : 'Modelo *'}</Label>
+                {isDevice ? (
+                  <ModelSelect brand={brand} value={model} onChange={setModel} />
+                ) : isAcc ? (
+                  <Select value={ACCESSORY_CATEGORIES.includes(model) ? model : ''} onValueChange={setModel}>
+                    <SelectTrigger className="h-9"><SelectValue placeholder="Tipo" /></SelectTrigger>
+                    <SelectContent>
+                      {ACCESSORY_CATEGORIES.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
+                    </SelectContent>
+                  </Select>
+                ) : (
+                  <Input value={model} onChange={(e) => setModel(e.target.value)} placeholder="Ej: Pantalla iPhone 13" className="h-9" />
+                )}
+              </div>
+              {/* Capacity moved to per-line in the batch table */}
+              {isDevice && (
+                <div>
+                  <Label className="text-xs font-medium mb-1 block">Condición</Label>
+                  <Select value={condition} onValueChange={setCondition}>
+                    <SelectTrigger className="h-9"><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="excelente">Excelente</SelectItem>
+                      <SelectItem value="bueno">Bueno</SelectItem>
+                      <SelectItem value="usado">Usado</SelectItem>
+                      <SelectItem value="regular">Regular</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
+              <div className="flex items-end pb-1">
+                <div className="flex items-center gap-2">
+                  <Switch checked={isNew} onCheckedChange={setIsNew} />
+                  <Label className="text-xs">Nuevos</Label>
+                </div>
+              </div>
+            </div>
+
+            <Separator />
+
+            {/* Batch rows */}
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <h3 className="text-sm font-semibold">Artículos ({batchItems.length})</h3>
+                <Button size="sm" variant="outline" onClick={() => addBatchRow()}>
+                  <Plus className="mr-1 h-3.5 w-3.5" /> Agregar fila
+                </Button>
+              </div>
+
+              <div className="rounded-lg border">
+                <Table>
+                  <TableHeader>
+                    <TableRow className="bg-muted/50">
+                      <TableHead className="text-xs w-10 text-center">#</TableHead>
+                      {isDevice && <TableHead className="text-xs">IMEI</TableHead>}
+                      <TableHead className="text-xs">Color</TableHead>
+                      {isDevice && <TableHead className="text-xs">Capacidad</TableHead>}
+                      {isDevice && <TableHead className="text-xs w-[70px]">Grado</TableHead>}
+                      {isDevice && <TableHead className="text-xs w-24">Bat %</TableHead>}
+                      {!isDevice && <TableHead className="text-xs w-[70px]">Cant.</TableHead>}
+                      <TableHead className="text-xs">Compra</TableHead>
+                      <TableHead className="text-xs">Venta</TableHead>
+                      <TableHead className="text-xs">Ganancia</TableHead>
+                      <TableHead className="text-xs">Nota</TableHead>
+                      <TableHead className="w-10" />
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {batchItems.map((row, i) => {
+                      const profit = (parseFloat(row.salePrice) || 0) - (parseFloat(row.purchaseCost) || 0);
+                      return (
+                        <TableRow key={row.id}>
+                          <TableCell className="text-xs text-center font-medium text-muted-foreground">{i + 1}</TableCell>
+                          {isDevice && (
+                            <TableCell>
+                              <div className="flex gap-1">
+                                <Input
+                                  ref={(el) => { imeiRefs.current[row.id] = el; }}
+                                  value={row.imei}
+                                  onChange={(e) => updateBatchRow(row.id, 'imei', e.target.value)}
+                                  placeholder="IMEI"
+                                  className="h-8 text-xs"
+                                />
+                                <Button type="button" variant="ghost" size="icon" className="h-8 w-8 shrink-0" onClick={() => { setScanRowId(row.id); setShowImeiScanner(true); }}>
+                                  <Camera className="h-3.5 w-3.5" />
+                                </Button>
+                              </div>
+                            </TableCell>
                           )}
-                        </TableCell>
-                        {isDevice && (
                           <TableCell>
-                            {catalogDevice?.storages ? (
-                              <Select value={row.capacity} onValueChange={(v) => updateBatchRow(row.id, 'capacity', v)}>
+                            {isDevice && catalogDevice?.colors ? (
+                              <Select value={row.color} onValueChange={(v) => updateBatchRow(row.id, 'color', v)}>
                                 <SelectTrigger className="h-8 text-xs"><SelectValue placeholder="—" /></SelectTrigger>
-                                <SelectContent>{catalogDevice.storages.map((st) => <SelectItem key={st} value={st}>{st}</SelectItem>)}</SelectContent>
+                                <SelectContent>{catalogDevice.colors.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}</SelectContent>
                               </Select>
                             ) : (
-                              <Input value={row.capacity} onChange={(e) => updateBatchRow(row.id, 'capacity', e.target.value)} placeholder="GB" className="h-8 text-xs" />
+                              <Input value={row.color} onChange={(e) => updateBatchRow(row.id, 'color', e.target.value)} placeholder="Color" className="h-8 text-xs" />
                             )}
                           </TableCell>
-                        )}
-                        {isDevice && (
-                          <TableCell>
-                            <Input value={row.grade} onChange={(e) => updateBatchRow(row.id, 'grade', e.target.value)} placeholder="A+" className="h-8 text-xs" />
-                          </TableCell>
-                        )}
-                        {isDevice && (
-                          <TableCell>
-                            <Input type="number" value={row.batteryHealth} onChange={(e) => updateBatchRow(row.id, 'batteryHealth', e.target.value)} placeholder="%" className="h-8 text-xs" />
-                          </TableCell>
-                        )}
-                        {!isDevice && (
-                          <TableCell>
-                            <Input type="number" min="1" value={row.quantity} onChange={(e) => updateBatchRow(row.id, 'quantity', e.target.value)} placeholder="1" className="h-8 text-xs" />
-                          </TableCell>
-                        )}
-                        <TableCell>
-                          <Input
-                            ref={!isDevice ? (el) => { imeiRefs.current[row.id] = el; } : undefined}
-                            type="number" value={row.purchaseCost} onChange={(e) => updateBatchRow(row.id, 'purchaseCost', e.target.value)} placeholder="$" className="h-8 text-xs"
-                          />
-                        </TableCell>
-                        <TableCell>
-                          <Input type="number" value={row.salePrice} onChange={(e) => updateBatchRow(row.id, 'salePrice', e.target.value)} onKeyDown={(e) => handleBatchKeyDown(e, i)} placeholder="$" className="h-8 text-xs" />
-                        </TableCell>
-                        <TableCell className={`text-xs font-semibold whitespace-nowrap ${profit > 0 ? 'text-green-500' : profit < 0 ? 'text-red-500' : 'text-muted-foreground'}`}>
-                          {row.purchaseCost && row.salePrice ? formatCurrency(profit) : '—'}
-                        </TableCell>
-                        <TableCell>
-                          <Input value={row.notes} onChange={(e) => updateBatchRow(row.id, 'notes', e.target.value)} onKeyDown={(e) => handleBatchKeyDown(e, i)} placeholder="Nota" className="h-8 text-xs" />
-                        </TableCell>
-                        <TableCell className="text-center">
-                          {batchItems.length > 1 && (
-                            <Button size="icon" variant="ghost" className="h-7 w-7 text-muted-foreground hover:text-destructive" onClick={() => removeBatchRow(row.id)}>
-                              <Trash2 className="h-3.5 w-3.5" />
-                            </Button>
+                          {isDevice && (
+                            <TableCell>
+                              {catalogDevice?.storages ? (
+                                <Select value={row.capacity} onValueChange={(v) => updateBatchRow(row.id, 'capacity', v)}>
+                                  <SelectTrigger className="h-8 text-xs"><SelectValue placeholder="—" /></SelectTrigger>
+                                  <SelectContent>{catalogDevice.storages.map((st) => <SelectItem key={st} value={st}>{st}</SelectItem>)}</SelectContent>
+                                </Select>
+                              ) : (
+                                <Input value={row.capacity} onChange={(e) => updateBatchRow(row.id, 'capacity', e.target.value)} placeholder="GB" className="h-8 text-xs" />
+                              )}
+                            </TableCell>
                           )}
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
-                </TableBody>
-              </Table>
+                          {isDevice && (
+                            <TableCell>
+                              <Input value={row.grade} onChange={(e) => updateBatchRow(row.id, 'grade', e.target.value)} placeholder="A+" className="h-8 text-xs" />
+                            </TableCell>
+                          )}
+                          {isDevice && (
+                            <TableCell>
+                              <Input type="number" value={row.batteryHealth} onChange={(e) => updateBatchRow(row.id, 'batteryHealth', e.target.value)} placeholder="%" className="h-8 text-xs w-full min-w-[60px]" />
+                            </TableCell>
+                          )}
+                          {!isDevice && (
+                            <TableCell>
+                              <Input type="number" min="1" value={row.quantity} onChange={(e) => updateBatchRow(row.id, 'quantity', e.target.value)} placeholder="1" className="h-8 text-xs" />
+                            </TableCell>
+                          )}
+                          <TableCell>
+                            <Input
+                              ref={!isDevice ? (el) => { imeiRefs.current[row.id] = el; } : undefined}
+                              type="number" value={row.purchaseCost} onChange={(e) => updateBatchRow(row.id, 'purchaseCost', e.target.value)} placeholder="$" className="h-8 text-xs"
+                            />
+                          </TableCell>
+                          <TableCell>
+                            <Input type="number" value={row.salePrice} onChange={(e) => updateBatchRow(row.id, 'salePrice', e.target.value)} onKeyDown={(e) => handleBatchKeyDown(e, i)} placeholder="$" className="h-8 text-xs" />
+                          </TableCell>
+                          <TableCell className={`text-xs font-semibold whitespace-nowrap ${profit > 0 ? 'text-green-500' : profit < 0 ? 'text-red-500' : 'text-muted-foreground'}`}>
+                            {row.purchaseCost && row.salePrice ? formatCurrency(profit) : '—'}
+                          </TableCell>
+                          <TableCell>
+                            <Input value={row.notes} onChange={(e) => updateBatchRow(row.id, 'notes', e.target.value)} onKeyDown={(e) => handleBatchKeyDown(e, i)} placeholder="Nota" className="h-8 text-xs" />
+                          </TableCell>
+                          <TableCell className="text-center">
+                            {batchItems.length > 1 && (
+                              <Button size="icon" variant="ghost" className="h-7 w-7 text-muted-foreground hover:text-destructive" onClick={() => removeBatchRow(row.id)}>
+                                <Trash2 className="h-3.5 w-3.5" />
+                              </Button>
+                            )}
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                  </TableBody>
+                </Table>
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* Fixed footer */}
-        <div className="shrink-0 border-t px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-3 bg-background">
-          {validBatch.length > 0 ? (
-            <div className="flex flex-wrap items-center gap-4 text-sm">
-              <span className="text-muted-foreground">{validBatch.length} artículo{validBatch.length !== 1 ? 's' : ''}</span>
-              <span>Costo: <strong>{formatCurrency(batchTotalCost)}</strong></span>
-              <span>Ganancia: <strong className={batchTotalProfit >= 0 ? 'text-green-500' : 'text-red-500'}>{formatCurrency(batchTotalProfit)}</strong></span>
+          {/* Fixed footer */}
+          <div className="shrink-0 border-t px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-3 bg-background">
+            {validBatch.length > 0 ? (
+              <div className="flex flex-wrap items-center gap-4 text-sm">
+                <span className="text-muted-foreground">{validBatch.length} artículo{validBatch.length !== 1 ? 's' : ''}</span>
+                <span>Costo: <strong>{formatCurrency(batchTotalCost)}</strong></span>
+                <span>Ganancia: <strong className={batchTotalProfit >= 0 ? 'text-green-500' : 'text-red-500'}>{formatCurrency(batchTotalProfit)}</strong></span>
+              </div>
+            ) : <div />}
+            <div className="flex gap-2">
+              <Button variant="outline" onClick={() => onOpenChange(false)}>Cancelar</Button>
+              <Button onClick={handleSubmit} disabled={saving}>
+                <Check className="mr-2 h-4 w-4" />
+                {saving ? 'Guardando...' : `Ingresar ${validBatch.length} artículos`}
+              </Button>
             </div>
-          ) : <div />}
-          <div className="flex gap-2">
-            <Button variant="outline" onClick={() => onOpenChange(false)}>Cancelar</Button>
-            <Button onClick={handleSubmit} disabled={saving}>
-              <Check className="mr-2 h-4 w-4" />
-              {saving ? 'Guardando...' : `Ingresar ${validBatch.length} artículos`}
-            </Button>
           </div>
-        </div>
-      </DialogContent>
-    </Dialog>
+        </DialogContent>
+      </Dialog>
 
-    {/* IMEI Camera Scanner */}
-    <Dialog open={showImeiScanner} onOpenChange={setShowImeiScanner}>
-      <DialogContent className="max-w-sm">
-        <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
-            <Camera className="h-5 w-5" /> Escanear IMEI
-          </DialogTitle>
-        </DialogHeader>
-        <BatchImeiScanner
-          active={showImeiScanner}
-          onScan={(code) => {
-            if (scanRowId) updateBatchRow(scanRowId, 'imei', code);
-            setShowImeiScanner(false);
-          }}
-        />
-        <Button variant="outline" onClick={() => setShowImeiScanner(false)}>Cerrar</Button>
-      </DialogContent>
-    </Dialog>
+      {/* IMEI Camera Scanner */}
+      <Dialog open={showImeiScanner} onOpenChange={setShowImeiScanner}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Camera className="h-5 w-5" /> Escanear IMEI
+            </DialogTitle>
+          </DialogHeader>
+          <BatchImeiScanner
+            active={showImeiScanner}
+            onScan={(code) => {
+              if (scanRowId) updateBatchRow(scanRowId, 'imei', code);
+              setShowImeiScanner(false);
+            }}
+          />
+          <Button variant="outline" onClick={() => setShowImeiScanner(false)}>Cerrar</Button>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }
