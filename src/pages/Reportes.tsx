@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { supabase } from '@/integrations/supabase/client';
 import { Separator } from '@/components/ui/separator';
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
@@ -42,6 +43,7 @@ export default function Reportes() {
   const [statusFilter, setStatusFilter] = useState('all');
   const [saleToDelete, setSaleToDelete] = useState<string | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isPrinting, setIsPrinting] = useState(false);
   const getDateRange = (filter: string) => {
     const now = new Date();
     switch (filter) {
@@ -334,29 +336,61 @@ export default function Reportes() {
                   {selectedSale.notes && <div><span className="text-muted-foreground text-xs">Notas</span><p className="text-xs">{selectedSale.notes}</p></div>}
                 </div>
                 <div className="flex gap-2">
-                  <Button className="flex-1" onClick={() => {
-                    // Reconstruct receipt options from sale data for faithful reprint
-                    const opts: import('@/components/PrintReceipt').SaleReceiptOptions = {
-                      warrantyText: tenant?.warranty_text,
-                    };
-                    // Parse trade-in info from notes
-                    if (selectedSale.notes) {
-                      const tradeInMatches = selectedSale.notes.match(/Trade-In: ([^|]+)/g);
-                      if (tradeInMatches) {
-                        opts.tradeInDevices = tradeInMatches.map(m => {
-                          const match = m.match(/Trade-In: (.+?) (.+?)(?:\s*\(IMEI: (.+?)\))?\s*—\s*(.+)/);
-                          if (match) {
-                            const valueStr = match[4].replace(/[^0-9.]/g, '');
-                            return { brand: match[1], model: match[2], imei: match[3], value: parseFloat(valueStr) || 0 };
-                          }
-                          return { brand: '', model: m.replace('Trade-In: ', ''), value: 0 };
-                        });
-                        opts.tradeInTotal = opts.tradeInDevices.reduce((s, t) => s + t.value, 0);
+                  <Button className="flex-1" disabled={isPrinting} onClick={async () => {
+                    setIsPrinting(true);
+                    try {
+                      let installments: any = undefined;
+                      if (selectedSale.payment_method === 'financing') {
+                        const { data: loan } = await supabase.from('loans').select('*, loan_installments(*)').eq('sale_id', selectedSale.id).maybeSingle();
+                        if (loan && loan.loan_installments) {
+                          // Sort installments by number
+                          installments = loan.loan_installments.sort((a: any, b: any) => a.installment_number - b.installment_number);
+                        }
                       }
+
+                      let batteryHealth, condition, grade;
+                      const firstItem = selectedSale.sale_items?.[0];
+                      if (firstItem?.inventory_item_id) {
+                        const { data: invObj } = await supabase.from('inventory_items').select('battery_health, condition, grade').eq('id', firstItem.inventory_item_id).maybeSingle();
+                        if (invObj) {
+                          batteryHealth = invObj.battery_health;
+                          condition = invObj.condition;
+                          grade = invObj.grade;
+                        }
+                      }
+
+                      // Reconstruct receipt options from sale data for faithful reprint
+                      const opts: import('@/components/PrintReceipt').SaleReceiptOptions = {
+                        warrantyText: tenant?.warranty_text,
+                        batteryHealth,
+                        condition,
+                        grade,
+                      };
+                      // Parse trade-in info from notes
+                      if (selectedSale.notes) {
+                        const tradeInMatches = selectedSale.notes.match(/Trade-In: ([^|]+)/g);
+                        if (tradeInMatches) {
+                          opts.tradeInDevices = tradeInMatches.map(m => {
+                            const match = m.match(/Trade-In: (.+?) (.+?)(?:\s*\(IMEI: (.+?)\))?\s*—\s*(.+)/);
+                            if (match) {
+                              const valueStr = match[4].replace(/[^0-9.]/g, '');
+                              return { brand: match[1], model: match[2], imei: match[3], value: parseFloat(valueStr) || 0 };
+                            }
+                            return { brand: '', model: m.replace('Trade-In: ', ''), value: 0 };
+                          });
+                          opts.tradeInTotal = opts.tradeInDevices.reduce((s, t) => s + t.value, 0);
+                        }
+                      }
+                      printSaleReceipt(selectedSale, installments, tenant?.name, opts, tenant?.logo_url || undefined);
+                    } catch (err) {
+                      console.error('Error fetching print details', err);
+                      // Fallback print if fetch fails
+                      printSaleReceipt(selectedSale, undefined, tenant?.name, { warrantyText: tenant?.warranty_text }, tenant?.logo_url || undefined);
+                    } finally {
+                      setIsPrinting(false);
                     }
-                    printSaleReceipt(selectedSale, undefined, tenant?.name, opts, tenant?.logo_url || undefined);
                   }}>
-                    <Printer className="h-4 w-4 mr-2" /> Reimprimir Factura
+                    <Printer className="h-4 w-4 mr-2" /> {isPrinting ? 'Generando...' : 'Reimprimir Factura'}
                   </Button>
                   {canDelete && (
                     <Button variant="destructive" size="icon" onClick={() => setSaleToDelete(selectedSale.id)}>
