@@ -274,7 +274,7 @@ export default function Vender() {
       let saleNotes = applyItbis ? `ITBIS ${itbisRate}% incluido: ${formatCurrency(itbisAmount)}` : '';
       if (tradeInEnabled && tradeInDevices.length > 0) {
         const tradeInNote = tradeInDevices.map(t =>
-          `Trade-In: ${t.brand} ${t.model}${t.imei ? ` (IMEI: ${t.imei})` : ''} — ${formatCurrency(parseFloat(t.value) || 0)}`
+          `Trade-In: ${t.brand} ${t.model}${t.condition ? ` [Cond: ${t.condition}]` : ''}${t.batteryHealth ? ` [Bat: ${t.batteryHealth}%]` : ''}${t.imei ? ` (IMEI: ${t.imei})` : ''} — ${formatCurrency(parseFloat(t.value) || 0)}`
         ).join(' | ');
         saleNotes = saleNotes ? `${saleNotes} | ${tradeInNote}` : tradeInNote;
       }

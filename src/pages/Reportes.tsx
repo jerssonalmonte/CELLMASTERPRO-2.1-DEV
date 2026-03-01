@@ -371,14 +371,59 @@ export default function Reportes() {
                         const tradeInMatches = selectedSale.notes.match(/Trade-In: ([^|]+)/g);
                         if (tradeInMatches) {
                           opts.tradeInDevices = tradeInMatches.map(m => {
-                            const match = m.match(/Trade-In: (.+?) (.+?)(?:\s*\(IMEI: (.+?)\))?\s*—\s*(.+)/);
-                            if (match) {
-                              const valueStr = match[4].replace(/[^0-9.]/g, '');
-                              return { brand: match[1], model: match[2], imei: match[3], value: parseFloat(valueStr) || 0 };
+                            const imeiMatch = m.match(/\(IMEI: ([^)]+)\)/);
+                            const imei = imeiMatch ? imeiMatch[1] : undefined;
+
+                            const condMatch = m.match(/\[Cond: ([^\]]+)\]/);
+                            const condition = condMatch ? condMatch[1] : undefined;
+
+                            const batMatch = m.match(/\[Bat: ([0-9]+)%\]/);
+                            const batteryHealth = batMatch ? parseInt(batMatch[1]) : undefined;
+
+                            const priceMatch = m.match(/—\s*(.+)$/);
+                            const valueStr = priceMatch ? priceMatch[1].replace(/[^0-9.]/g, '') : '0';
+
+                            let deviceStr = m.replace('Trade-In:', '').replace(/—.*$/, '');
+                            if (imeiMatch) deviceStr = deviceStr.replace(imeiMatch[0], '');
+                            if (condMatch) deviceStr = deviceStr.replace(condMatch[0], '');
+                            if (batMatch) deviceStr = deviceStr.replace(batMatch[0], '');
+                            deviceStr = deviceStr.trim();
+
+                            const firstSpace = deviceStr.indexOf(' ');
+                            let brand = deviceStr;
+                            let model = '';
+                            if (firstSpace !== -1) {
+                              brand = deviceStr.slice(0, firstSpace);
+                              model = deviceStr.slice(firstSpace + 1).trim();
                             }
-                            return { brand: '', model: m.replace('Trade-In: ', ''), value: 0 };
+
+                            return {
+                              brand,
+                              model,
+                              imei,
+                              value: parseFloat(valueStr) || 0,
+                              condition,
+                              batteryHealth
+                            };
                           });
                           opts.tradeInTotal = opts.tradeInDevices.reduce((s, t) => s + t.value, 0);
+
+                          // Retroactively fetch missing details for older trade-ins
+                          if (opts.tradeInDevices.length > 0 && !opts.tradeInDevices[0].condition) {
+                            const { data: purchaseData } = await supabase.from('purchases').select('id').eq('notes', `Trade-In desde venta #${selectedSale.id.slice(0, 8).toUpperCase()}`).maybeSingle();
+                            if (purchaseData) {
+                              const { data: invItems } = await supabase.from('inventory_items').select('condition, battery_health, imei, products(name)').eq('purchase_id', purchaseData.id);
+                              if (invItems && invItems.length > 0) {
+                                opts.tradeInDevices = opts.tradeInDevices.map(t => {
+                                  const match = invItems.find((inv: any) => (inv.imei && inv.imei === t.imei) || (inv.products?.name && t.model.includes(inv.products.name)));
+                                  if (match) {
+                                    return { ...t, condition: match.condition, batteryHealth: match.battery_health };
+                                  }
+                                  return t;
+                                });
+                              }
+                            }
+                          }
                         }
                       }
                       printSaleReceipt(selectedSale, installments, tenant?.name, opts, tenant?.logo_url || undefined);
