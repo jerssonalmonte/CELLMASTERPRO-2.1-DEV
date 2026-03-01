@@ -586,7 +586,7 @@ export default function Compra() {
                               )}
                               {!isBatchAccessory && (
                                 <TableCell>
-                                  <Input type="number" value={row.batteryHealth} onChange={(e) => updateBatchRow(row.id, 'batteryHealth', e.target.value)} placeholder="%" className="h-8 text-xs w-14" />
+                                  <Input type="number" value={row.batteryHealth} onChange={(e) => updateBatchRow(row.id, 'batteryHealth', e.target.value)} placeholder="%" className="h-8 text-xs w-20" />
                                 </TableCell>
                               )}
                               <TableCell>
