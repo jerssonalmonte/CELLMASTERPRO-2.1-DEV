@@ -539,7 +539,7 @@ export default function Compra() {
                           {!isBatchAccessory && <TableHead className="text-xs">IMEI</TableHead>}
                           <TableHead className="text-xs">Color</TableHead>
                           {!isBatchAccessory && <TableHead className="text-xs">Grado</TableHead>}
-                          {!isBatchAccessory && <TableHead className="text-xs">Bat %</TableHead>}
+                          {!isBatchAccessory && <TableHead className="text-xs w-20">Bat %</TableHead>}
                           <TableHead className="text-xs">Compra</TableHead>
                           <TableHead className="text-xs">Venta</TableHead>
                           <TableHead className="text-xs">Ganancia</TableHead>
